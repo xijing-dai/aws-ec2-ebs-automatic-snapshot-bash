@@ -101,14 +101,16 @@ cleanup_snapshots() {
 			snapshot_date_in_seconds=$(date "--date=$snapshot_date" +%s)
 			snapshot_description=$(aws ec2 describe-snapshots --snapshot-id $snapshot --region $region --query Snapshots[].Description)
 
-			if (( $snapshot_date_in_seconds <= $retention_date_in_seconds )); then
-				if [[ $(date --date=$snapshot_date +%u) == $RETAIN_DAY_OF_WEEK ]]; then
-					log "DELETING snapshot $snapshot. Description: $snapshot_description ..."
-					aws ec2 delete-snapshot --region $region --snapshot-id $snapshot
-				fi
-			else
-				log "Not deleting snapshot $snapshot. Description: $snapshot_description ..."
-			fi
+                        if (( $snapshot_date_in_seconds <= $retention_date_in_seconds )); then
+                                if [[ $(date --date=$snapshot_date +%u) == $RETAIN_DAY_OF_WEEK ]]; then
+                                        log "Not deleting because retention day: $snapshot $snapshot_description"
+                                else
+                                        log "Deleting because too old: $snapshot $snapshot_description"
+                                        aws ec2 delete-snapshot --region $region --snapshot-id $snapshot
+                                fi
+                        else
+                                log "Not deleting because not old enough: $snapshot $snapshot_description"
+                        fi
 		done
 	done
 }
