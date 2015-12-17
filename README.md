@@ -66,10 +66,10 @@ wget https://raw.githubusercontent.com/sassafrastech/aws-ec2-ebs-automatic-snaps
 chmod +x ebs-snapshot.sh
 
 # Manual test
-./ebs-snapshot.sh
+SNAPSHOT_NAME_PREFIX=foo ./ebs-snapshot.sh
 ```
 
 You should then setup a cron job in order to schedule a nightly backup. Example crontab jobs:
 ```
-0 3 * * * AWS_CONFIG_FILE="/root/.aws/config" RETAIN_DAY_OF_WEEK=4 /root/ebs-snapshot.sh
+0 3 * * * AWS_CONFIG_FILE="/root/.aws/config" RETAIN_DAY_OF_WEEK=4 SNAPSHOT_NAME_PREFIX=foo /root/ebs-snapshot.sh
 ```
