@@ -31,8 +31,10 @@ set -o pipefail
 ## Variable Declartions ##
 
 # Get Instance Details
-instance_id=$(wget -q -O- http://169.254.169.254/latest/meta-data/instance-id)
-region=$(wget -q -O- http://169.254.169.254/latest/meta-data/placement/availability-zone | sed -e 's/\([1-9]\).$/\1/g')
+#instance_id=$(wget -q -O- http://169.254.169.254/latest/meta-data/instance-id)
+#region=$(wget -q -O- http://169.254.169.254/latest/meta-data/placement/availability-zone | sed -e 's/\([1-9]\).$/\1/g')
+instance_id="${1}"
+region="${2}"
 
 # Set Logging Options
 logfile="/var/log/ebs-snapshot.log"
